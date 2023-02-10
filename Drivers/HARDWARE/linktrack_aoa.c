@@ -75,9 +75,9 @@ void AOA_Application(void)
 				{
 					if((dis_measure>=(dis_expect+dis_range))||(dis_measure<=(dis_expect-dis_range))) //在距离跟随的时候才进行避障
 					{ 
-						if(((TOF_FR_dis0<danger_distance)&&(TOF_signal_strength0>TOF_signal_strength))||
-								((TOF_FM_dis1<danger_distance)&&(TOF_signal_strength1>TOF_signal_strength))||
-								((TOF_FL_dis2<danger_distance)&&(TOF_signal_strength2>TOF_signal_strength)))
+						if(((TOF_FR_dis0<danger_distance)&&(TOF_signal_strength0>TOF_signal_strength)&&(TOF_status0 != 255))||
+								((TOF_FM_dis1<danger_distance)&&(TOF_signal_strength1>TOF_signal_strength)&&(TOF_status1 != 255))||
+								((TOF_FL_dis2<danger_distance)&&(TOF_signal_strength2>TOF_signal_strength)&&(TOF_status2 != 255)))//V1.0.1增加距离状态指示判断
 						{
 							avoid_danger_status=1;                                          //如果符合避障的条件，避障控制标志位置1
 						}
@@ -89,9 +89,9 @@ void AOA_Application(void)
 					}
 					else                                                                //如果避障控制标志位为0，开始常规跟随控制
 					{
-						if(((TOF_FR_dis0<slow_down_distance)&&(TOF_signal_strength0>TOF_signal_strength))||
-								((TOF_FM_dis1<slow_down_distance)&&(TOF_signal_strength1>TOF_signal_strength))||
-								((TOF_FL_dis2<slow_down_distance)&&(TOF_signal_strength2>TOF_signal_strength))) 
+						if(((TOF_FR_dis0<slow_down_distance)&&(TOF_signal_strength0>TOF_signal_strength)&&(TOF_status0 != 255))||
+								((TOF_FM_dis1<slow_down_distance)&&(TOF_signal_strength1>TOF_signal_strength)&&(TOF_status1 != 255))||
+								((TOF_FL_dis2<slow_down_distance)&&(TOF_signal_strength2>TOF_signal_strength)&&(TOF_status2 != 255)))
 						{
 							y1_increase=avoid_danger_slow_down_speed;                       //如果有一个传感器距离小于减速缓冲区阈值且相应的信号强度大于阈值，减速
 						}

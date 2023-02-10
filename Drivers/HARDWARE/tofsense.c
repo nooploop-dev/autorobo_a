@@ -98,7 +98,7 @@ void Avoid_Danger(void)
 {
 	if((TOF_FR_dis0<danger_distance)&&(TOF_FM_dis1<danger_distance)&&(TOF_FL_dis2<danger_distance)
 			&&(TOF_signal_strength0>TOF_signal_strength)&&(TOF_signal_strength1>TOF_signal_strength)
-			&&(TOF_signal_strength2>TOF_signal_strength))                                  //如果前右、前中、前左TOF传感器距离小于避障阈值且对应信号强度大于阈值
+			&&(TOF_signal_strength2>TOF_signal_strength)&&(TOF_status0 != 255)&&(TOF_status1 != 255)&&(TOF_status2 != 255))//（V1.0.1增加距离状态指示判断）如果前右、前中、前左TOF传感器距离小于避障阈值且对应信号强度大于阈值
 	{
 		if(avoid_danger_turn_flag == 0)                                                  //如果第一次出现3TOF距离小于阈值情况
 		{
@@ -111,21 +111,24 @@ void Avoid_Danger(void)
 		}
 	}
 	else if((TOF_FR_dis0<danger_distance)&&(TOF_FM_dis1<danger_distance)&&
-			(TOF_signal_strength0>TOF_signal_strength)&&(TOF_signal_strength1>TOF_signal_strength)) //如果前右、前中TOF传感器距离小于避障阈值且对应信号强度大于阈值
+			(TOF_signal_strength0>TOF_signal_strength)&&(TOF_signal_strength1>TOF_signal_strength)&&
+			(TOF_status0 != 255)&&(TOF_status1 != 255)) //如果前右、前中TOF传感器距离小于避障阈值且对应信号强度大于阈值
 	{
 		Move_Control( 127-avoid_danger_shift_speed, 127, 127);                           //避障运动控制
 	}
 	else if((TOF_FM_dis1<danger_distance)&&(TOF_FL_dis2<danger_distance)&&
-			(TOF_signal_strength1>TOF_signal_strength)&&(TOF_signal_strength2>TOF_signal_strength)) //如果前中、前左TOF传感器距离小于避障阈值且对应信号强度大于阈值
+			(TOF_signal_strength1>TOF_signal_strength)&&(TOF_signal_strength2>TOF_signal_strength)&&
+			(TOF_status1 != 255)&&(TOF_status2 != 255)) //如果前中、前左TOF传感器距离小于避障阈值且对应信号强度大于阈值
 	{
 		Move_Control( 127+avoid_danger_shift_speed, 127, 127);                           //避障运动控制
 	}
 	else if((TOF_FR_dis0<danger_distance)&&(TOF_FL_dis2<danger_distance)&&
-			(TOF_signal_strength0>TOF_signal_strength)&&(TOF_signal_strength2>TOF_signal_strength)) //如果前右、前左TOF传感器距离小于避障阈值且对应信号强度大于阈值
+			(TOF_signal_strength0>TOF_signal_strength)&&(TOF_signal_strength2>TOF_signal_strength)&&
+			(TOF_status0 != 255)&&(TOF_status2 != 255)) //如果前右、前左TOF传感器距离小于避障阈值且对应信号强度大于阈值
 	{
 		Move_Control( 127-avoid_danger_shift_speed, 127, 127); 												   //避障运动控制
 	}
-	else if((TOF_FR_dis0<danger_distance)&&(TOF_signal_strength0>TOF_signal_strength)) //如果前右TOF传感器距离小于避障阈值且对应信号强度大于阈值
+	else if((TOF_FR_dis0<danger_distance)&&(TOF_signal_strength0>TOF_signal_strength)&&(TOF_status0 != 255)) //如果前右TOF传感器距离小于避障阈值且对应信号强度大于阈值
 	{
 		Move_Control( 127-avoid_danger_shift_speed, 127, 127);                           //避障运动控制
 		avoid_danger_shift_time=AVOID_DANGER_SHIFT_SHORT_TIME;                           //横向开环控制一段较短时间
@@ -139,11 +142,11 @@ void Avoid_Danger(void)
 			avoid_danger_turn_count=0;                                                     //清零转向计数变量，按照横移避障逻辑避障
 		}
 	}
-	else if((TOF_FM_dis1<danger_distance)&&(TOF_signal_strength1>TOF_signal_strength)) //如果前中TOF传感器距离小于避障阈值且对应信号强度大于阈值
+	else if((TOF_FM_dis1<danger_distance)&&(TOF_signal_strength1>TOF_signal_strength)&&(TOF_status1 != 255)) //如果前中TOF传感器距离小于避障阈值且对应信号强度大于阈值
 	{
 		Move_Control( 127-avoid_danger_shift_speed, 127, 127); 												   //避障运动控制
 	}
-	else if((TOF_FL_dis2<danger_distance)&&(TOF_signal_strength2>TOF_signal_strength)) //如果前左TOF传感器距离小于避障阈值且对应信号强度大于阈值
+	else if((TOF_FL_dis2<danger_distance)&&(TOF_signal_strength2>TOF_signal_strength)&&(TOF_status2 != 255)) //如果前左TOF传感器距离小于避障阈值且对应信号强度大于阈值
 	{
 		Move_Control( 127+avoid_danger_shift_speed, 127, 127);                           //避障运动控制
 		avoid_danger_shift_time=AVOID_DANGER_SHIFT_SHORT_TIME;                           //横向开环控制一段较短时间
