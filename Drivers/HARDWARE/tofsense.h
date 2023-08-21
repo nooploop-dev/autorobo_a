@@ -6,16 +6,23 @@
 #define AVOID_DANGER_SHIFT_MEDIUM_TIME 300    //ÊÊÖĞµÄ¿ª»·±ÜÕÏ¿ØÖÆÊ±¼ä£¬µ¥Î»ms
 #define AVOID_DANGER_SHIFT_LONG_TIME 500      //½Ï³¤µÄ¿ª»·±ÜÕÏ¿ØÖÆÊ±¼ä£¬µ¥Î»ms
 
+#define TOF_M_POINT_GROUP_NUM 16              //TOF-MÏµÁĞ64µãÎ»·Ö×é×óÖĞÓÒ×éÃ¿×éµÄµãÎ»ÊıÁ¿
+
 void Avoid_Danger(void);                      //TOFSense±ÜÕÏº¯Êı
 void TOF_Application(void);                   //TOFSenseÓ¦ÓÃº¯Êı
 
-extern uint8_t u_rx_buf_3[16];                //usart3½ÓÊÕ»º´æÊı×é
+uint8_t TOF_series_switch;                    //µ±Ç°Ê¹ÓÃµÄTOF¼¤¹â´«¸ĞÆ÷ÏµÁĞ£¬0ÎªTOFSenseÏµÁĞ£¬1ÎªTOFSense-FÏµÁĞ£¬2ÎªTOFSense-MÏµÁĞ£¬¸ù¾İĞ­Òé¹¦ÄÜÂë×Ô¶¯Ê¶±ğ£¬FÏµÁĞ²»Ö§³Ö¼¶Áª£¬Ôİ²»Ö§³Ö
+
+extern uint8_t u_rx_buf_3[1024];              //usart3½ÓÊÕ»º´æÊı×é
+extern uint8_t u_tx_buf_3[8];                 //usart3·¢ËÍ»º´æÊı×é£¬ÓÃÓÚ²éÑ¯¼¶ÁªµÄTOF
+
 extern uint8_t TOF_unpack_correct_flag;       //TOFSenseÒ»Ö¡Êı¾İ½â°üÕıÈ·±êÖ¾Î»
 extern uint8_t TOF_DMA_receive_flag;          //DMA½ÓÊÕÒ»Ö¡TOFSenseĞ­ÒéÊı¾İÍê³É±êÖ¾Î»
-extern uint8_t TOF_data_length;               //DMA½ÓÊÕÒ»Ö¡TOFSenseĞ­ÒéÊı¾İ³¤¶È
-extern uint8_t u_tx_buf_3[8]; 								//usart3·¢ËÍ»º´æÊı×é£¬ÓÃÓÚ²éÑ¯¼¶ÁªµÄTOF
+extern uint16_t TOF_data_length;              //DMA½ÓÊÕÒ»Ö¡TOFSenseĞ­ÒéÊı¾İ³¤¶È
+
 extern uint8_t TOF_inquire_cycle_count;       //TOFSenseÄ£¿é´®¿Ú²éÑ¯Ä£Ê½²éÑ¯ÖÜÆÚ¼ÆÊı±äÁ¿£¨5ms²éÑ¯Ò»´Î£©
 extern uint8_t TOF_inquire_number;            //TOFSenseÄ£¿é´®¿Ú²éÑ¯Ä£Ê½µ±Ç°²éÑ¯µÄÄ£¿é±àºÅ
+
 extern float TOF_FR_dis0;                   	//0ºÅ£¨Ç°ÓÒ£©TOFSenseÄ£¿é¾àÀë
 extern float TOF_FM_dis1;                   	//1ºÅ£¨Ç°ÖĞ£©TOFSenseÄ£¿é¾àÀë
 extern float TOF_FL_dis2;                   	//2ºÅ£¨Ç°×ó£©TOFSenseÄ£¿é¾àÀë
@@ -41,7 +48,7 @@ extern uint8_t avoid_danger_status;           //±ÜÕÏÄ£Ê½×´Ì¬£¬1±íÊ¾´¦ÓÚ±ÜÕÏËã·¨¿
 extern float danger_distance;                 //±ÜÕÏ¾àÀëãĞÖµ,µ¥Î»£ºÃ×
 extern float slow_down_distance;            	//±ÜÕÏ¼õËÙ»º³åÇø¾àÀëãĞÖµ,µ¥Î»£ºÃ×
 extern uint8_t avoid_danger_slow_down_speed;  //±ÜÕÏ¼õËÙ»º³åÇø¼õËÙËÙ¶È£¬·¶Î§[0,127]
-extern uint8_t avoid_danger_shift_speed;    	//±ÜÕÏ¿ª»·¿ØÖÆºáÒÆËÙ¶È£¬·¶Î§[0,127]		
+extern uint8_t avoid_danger_shift_speed;    	//±ÜÕÏ¿ª»·¿ØÖÆºáÒÆËÙ¶È£¬·¶Î§[0,127]
 extern uint16_t avoid_danger_shift_time;      //±ÜÕÏ¿ª»·¿ØÖÆºáÒÆÊ±¼ä£¬µ¥Î»£ºms
 extern uint8_t avoid_danger_turn_flag;        //Ç°ÖÃ3TOF¾àÀë¶¼Ğ¡ÓÚ±ÜÕÏãĞÖµÇé¿öÏÂ¿ªÊ¼×ªÈ¦±êÖ¾Î»
 extern uint16_t avoid_danger_turn_count;      //Ç°ÖÃ3TOF¾àÀë¶¼Ğ¡ÓÚ±ÜÕÏãĞÖµÇé¿öÏÂ¿ªÊ¼×ªÈ¦¼ÆÊı±äÁ¿

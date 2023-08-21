@@ -220,23 +220,43 @@ void SysTick_Handler(void)
 	/*PS2读取延时处理2 结束*/
 
 	/*TOFSense查询周期计算 开始*/
-	if(TOF_inquire_cycle_count >= 0)              //每1ms计数变量自加一次
+	if(TOF_series_switch == 0)                      //如果当前连接的是TOFSense系列
 	{
-		TOF_inquire_cycle_count++;
-	}
-	if(TOF_inquire_cycle_count == 5)              //如果达到了5ms的查询周期，查询一轮的时间为x*5ms
-	{
-		if(TOF_inquire_number == 6)                 //如果当前查询的模块编号变为6（即完成一轮查询）
+		if(TOF_inquire_cycle_count >= 0)              //每1ms计数变量自加一次
 		{
-			TOF_inquire_number=0;
+			TOF_inquire_cycle_count++;
 		}
-		u_tx_buf_3[4]=TOF_inquire_number;           //将发送缓存数组中的查询模块ID改为当前需要查询的编号
-		u_tx_buf_3[7]=TOF_inquire_number+0x63;      //更新校验和
-		HAL_UART_Transmit_DMA(&huart3,u_tx_buf_3,sizeof(u_tx_buf_3));//开启usart3发送DMA传输
-		TOF_inquire_number++;                       //当前查询的模块编号+1
-		TOF_inquire_cycle_count=0;                  //重置计数变量
+		if(TOF_inquire_cycle_count == 5)              //如果达到了5ms的查询周期，查询一轮的时间为x*5ms
+		{
+			if(TOF_inquire_number == 6)                 //如果当前查询的模块编号变为6（即完成一轮查询）
+			{
+				TOF_inquire_number=0;
+			}
+			u_tx_buf_3[4]=TOF_inquire_number;           //将发送缓存数组中的查询模块ID改为当前需要查询的编号
+			u_tx_buf_3[7]=TOF_inquire_number+0x63;      //更新校验和
+			HAL_UART_Transmit_DMA(&huart3,u_tx_buf_3,sizeof(u_tx_buf_3));//开启usart3发送DMA传输
+			TOF_inquire_number++;                       //当前查询的模块编号+1
+			TOF_inquire_cycle_count=0;                  //重置计数变量
+		}
 	}
 	/*TOFSense查询周期计算 结束*/
+
+	/*TOFSense-M查询周期计算 开始*/
+	if(TOF_series_switch == 2)                      //如果当前连接的是TOFSense-M系列
+	{
+		if(TOF_inquire_cycle_count >= 0)              //每1ms计数变量自加一次
+		{
+			TOF_inquire_cycle_count++;
+		}
+		if(TOF_inquire_cycle_count == 70)             //如果达到了70ms的查询周期
+		{
+			u_tx_buf_3[4]=0;                            //将发送缓存数组中的查询模块ID改为当前需要查询的编号
+			u_tx_buf_3[7]=0x63;                         //更新校验和
+			HAL_UART_Transmit_DMA(&huart3,u_tx_buf_3,sizeof(u_tx_buf_3));//开启usart3发送DMA传输
+			TOF_inquire_cycle_count=0;                  //重置计数变量
+		}
+	}
+	/*TOFSense-M查询周期计算 结束*/
 
 	/*TOF避障开环控制延时 开始*/
 	if(avoid_danger_shift_time != 0)              //如果避障开环控制横移延时不等于0

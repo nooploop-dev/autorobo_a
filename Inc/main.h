@@ -51,6 +51,7 @@ extern "C" {
 #include "nlink_linktrack_nodeframe0.h"
 #include "nlink_linktrack_aoa_nodeframe0.h"
 #include "nlink_tofsense_frame0.h"
+#include "nlink_tofsensem_frame0.h"
 
 /* USER CODE END Includes */
 
