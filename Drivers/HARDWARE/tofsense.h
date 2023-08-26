@@ -11,7 +11,7 @@
 void Avoid_Danger(void);                      //TOFSense避障函数
 void TOF_Application(void);                   //TOFSense应用函数
 
-uint8_t TOF_series_switch;                    //当前使用的TOF激光传感器系列，0为TOFSense系列，1为TOFSense-F系列，2为TOFSense-M系列，根据协议功能码自动识别，F系列不支持级联，暂不支持
+extern uint8_t TOF_series_switch;             //当前使用的TOF激光传感器系列，0为TOFSense系列，1为TOFSense-F系列，2为TOFSense-M系列，根据协议功能码自动识别，F系列不支持级联，暂不支持
 
 extern uint8_t u_rx_buf_3[1024];              //usart3接收缓存数组
 extern uint8_t u_tx_buf_3[8];                 //usart3发送缓存数组，用于查询级联的TOF
